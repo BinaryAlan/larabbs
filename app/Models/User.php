@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
+use Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-
+    use Notifiable {
+        notify as laravelNotify;
+    }
     /**
      * The attributes that are mass assignable.
      *
      * @var array
-     */
-    protected $fillable = [
+     */protected $fillable = [
         'name', 'email', 'password', 'introduction', 'avatar',
     ];
 
@@ -26,17 +27,33 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    public function replies()
+
+    function markAsRead()
+    {
+        $this->notification_count = 0;
+        $this->save();
+        $this->unreadNotifications->markAsRead();
+    }
+    function replies()
     {
         return $this->hasMany(Reply::class);
     }
-    public function topics()
+    function topics()
     {
         return $this->hasMany(Topic::class);
     }
 
-    public function isAuthorOf($model)
+    function isAuthorOf($model)
     {
         return $this->id == $model->user_id;
+    }
+
+    function notify($instance)
+    {
+        if ($this->id == Auth::id()) {
+            return;
+        }
+        $this->increment("notification_count");
+        $this->laravelNotify($instance);
     }
 }
