@@ -26,4 +26,10 @@ class ReplyObserver
         $topic->increment('reply_count', 1);
         $topic->user->notify(new TopicReplied($reply));
     }
+
+    public function deleted(Reply $reply)
+    {
+        $topic = $reply->topic;
+        $topic->decrement('reply_count', 1);
+    }
 }
