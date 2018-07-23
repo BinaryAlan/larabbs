@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
-    public function show(Category $category, Request $request, Topic $topic, User $user)
+    public function show(Category $category, Request $request, Topic $topic, User $user, Link $link)
     {
         $topics       = $topic->withOrder($request->order)->where('category_id', $category->id)->paginate(20);
         $active_users = $user->getActiveUsers();
-
-        return view('topics.index', compact('category', 'topics', 'active_users'));
+        $links        = $link->getAllCached();
+        return view('topics.index', compact('category', 'topics', 'active_users', 'links'));
     }
 }
