@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models\Traits;
 
 use Carbon\Carbon;
@@ -75,5 +76,3 @@ trait LastActivedAtHelper
         return $this->field_prefix . $this->id;
     }
 }
-
-?>,

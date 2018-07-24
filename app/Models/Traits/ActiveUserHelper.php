@@ -12,7 +12,6 @@ trait ActiveUserHelper
     // 用于存放临时用户数据
     protected $users = [];
 
-                                 // 配置信息
     protected $topic_weight = 4; // 话题权重
     protected $reply_weight = 1; // 回复权重
     protected $pass_days    = 7; // 多少天内发表过内容
