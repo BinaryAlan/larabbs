@@ -29,5 +29,8 @@ $api->version('v1', [
 
         $api->post('captchas', 'CaptchasController@store')
             ->name('api.captchas.store');
+
+        $api->post('socials/{social_type}/authorizations', 'AuthorizationsController@socialStore')
+            ->name('api.socials.authorizations.store');
     });
 });
