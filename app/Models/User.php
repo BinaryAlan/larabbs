@@ -6,8 +6,9 @@ use Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Traits\LastActivedAtHelper;
     use Traits\ActiveUserHelper;
@@ -31,6 +32,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     function markAsRead()
     {
