@@ -64,6 +64,9 @@ $api->version('v1', [
         $api->get('links', 'LinksController@index')
             ->name('api.links.index');
 
+        $api->get('actived/users', 'UsersController@activedIndex')
+            ->name('api.actived.users.index');
+
         $api->group(['middleware' => 'api.auth'], function ($api) {
             // 当前登录用户信息
             $api->get('user', 'UsersController@me')
