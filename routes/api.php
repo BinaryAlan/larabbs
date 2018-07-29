@@ -61,6 +61,9 @@ $api->version('v1', [
         $api->get('users/{user}/replies', 'RepliesController@userIndex')
             ->name('api.users.replies.index');
 
+        $api->get('links', 'LinksController@index')
+            ->name('api.links.index');
+
         $api->group(['middleware' => 'api.auth'], function ($api) {
             // 当前登录用户信息
             $api->get('user', 'UsersController@me')
