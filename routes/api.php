@@ -52,6 +52,9 @@ $api->version('v1', [
         $api->get('users/{user}/topics', 'TopicsController@userIndex')
             ->name('api.users.topics.index');
 
+        $api->get('topics/{topic}', 'TopicsController@show')
+            ->name('api.topics.show');
+
         $api->group(['middleware' => 'api.auth'], function ($api) {
             // 当前登录用户信息
             $api->get('user', 'UsersController@me')
