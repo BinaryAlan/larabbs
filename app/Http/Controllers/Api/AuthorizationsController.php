@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\AuthorizationRequest;
 use App\Http\Requests\Api\SocialAuthorizationRequest;
+use App\Http\Requests\Api\WeappAuthorizationRequest;
 use App\Models\User;
 use Auth;
 
@@ -91,5 +92,43 @@ class AuthorizationsController extends Controller
     {
         Auth::guard('api')->logout();
         return $this->response->noContent();
+    }
+
+    public function weappStore(WeappAuthorizationRequest $request)
+    {
+        $code        = $request->code;
+        $miniProgram = \EasyWeChat::miniProgram();
+        $data        = $miniProgram->auth->session($code);
+
+        if (isset($data['errcode'])) {
+            return $this->response->errorUnauthorized('code 不正确');
+        }
+
+        $user                             = User::where('weapp_openid', $data['openid'])->first();
+        $attributes['weixin_session_key'] = $data['session_key'];
+        if (!$user) {
+            if (!$request->username) {
+                return $this->response->errorForbidden('用户不存在');
+            }
+
+            $username = $request->username;
+
+            filter_var($username, FILTER_VALIDATE_EMAIL) ?
+            $credentials['email']    = $username :
+            $credentials['phone']    = $username;
+            $credentials['password'] = $request->password;
+
+            if (!Auth::guard('api')->once($credentials)) {
+                return $this->response->errorUnauthorized('用户名或密码错误');
+            }
+
+            $user                       = Auth::guard('api')->getUser();
+            $attributes['weapp_openid'] = $data['openid'];
+        }
+
+        $user->update($attributes);
+
+        $token = Auth::guard('api')->fromUser($user);
+        return $this->respondWithToken($token)->setStatusCode(201);
     }
 }

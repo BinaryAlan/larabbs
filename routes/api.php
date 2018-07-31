@@ -67,6 +67,9 @@ $api->version('v1', [
         $api->get('actived/users', 'UsersController@activedIndex')
             ->name('api.actived.users.index');
 
+        $api->post('weapp/authorizations', 'AuthorizationsController@weappStore')
+            ->name('api.weapp.authorizations.store');
+
         $api->group(['middleware' => 'api.auth'], function ($api) {
             // 当前登录用户信息
             $api->get('user', 'UsersController@me')
