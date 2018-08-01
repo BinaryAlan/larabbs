@@ -70,12 +70,18 @@ $api->version('v1', [
         $api->post('weapp/authorizations', 'AuthorizationsController@weappStore')
             ->name('api.weapp.authorizations.store');
 
+        $api->post('weapp/users', 'UsersController@weappStore')
+            ->name('api.weapp.users.store');
+
         $api->group(['middleware' => 'api.auth'], function ($api) {
             // 当前登录用户信息
             $api->get('user', 'UsersController@me')
                 ->name('api.user.show');
 
             $api->patch('user', 'UsersController@update')
+                ->name('api.user.patch');
+
+            $api->put('user', 'UsersController@update')
                 ->name('api.user.update');
 
             $api->post('images', 'ImagesController@store')
