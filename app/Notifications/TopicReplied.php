@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Reply;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -16,7 +17,7 @@ class TopicReplied extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($reply)
+    public function __construct(Reply $reply)
     {
         $this->reply = $reply;
     }
