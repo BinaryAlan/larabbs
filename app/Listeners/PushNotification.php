@@ -2,7 +2,11 @@
 
 namespace App\Listeners;
 
-class PushNotification
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\DatabaseNotification;
+use JPush\Client;
+
+class PushNotification implements ShouldQueue
 {
     protected $client;
     /**
