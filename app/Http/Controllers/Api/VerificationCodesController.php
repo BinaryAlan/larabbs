@@ -23,7 +23,8 @@ class VerificationCodesController extends Controller
 
         $phone = $captchaData['phone'];
 
-        if (!app()->environment('production')) {
+        // if (!app()->environment('production')) {
+        if (true) {
             $code = '1234';
         } else {
 
